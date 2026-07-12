@@ -14,6 +14,8 @@ mcp-test/
 └── docker-compose.yaml
 ```
 
+![MCP Demo Screenshot](docs/assets/image.png)
+
 ---
 
 ## Quickstart (Docker)
