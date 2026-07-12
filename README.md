@@ -1,66 +1,40 @@
-# MCP Demo Server
+# MCP Demo
 
-A simple MCP (Model Context Protocol) server built with [FastMCP](https://github.com/jlowin/fastmcp).
+A simple [Model Context Protocol](https://modelcontextprotocol.io) project built with [FastMCP](https://gofastmcp.com).
 
-## Requirements
-
-- Python >= 3.11
-- fastmcp
-
-## Installation
-
-```bash
-pip install -r requirements.txt
 ```
-
-Or with uv:
-
-```bash
-uv sync
-```
-
-## Tools
-
-- **roll_dice(n_dice)** — Rolls `n` six-sided dice and returns the results
-- **add_number(a, b)** — Adds two numbers and returns the result
-
-## Local vs Remote Server
-
-### Local (stdio)
-- Runs as a subprocess, communicates via stdin/stdout
-- Only accessible to the process that spawned it (e.g. Claude Desktop)
-- No network port, no auth needed
-
-**Claude Desktop config** (`~/.claude/claude_desktop_config.json`):
-```json
-{
-  "mcpServers": {
-    "demo": {
-      "command": "python",
-      "args": ["/path/to/main.py"]
-    }
-  }
-}
-```
-
-**Test with inspector:**
-```bash
-uv run fastmcp dev main.py
+mcp-test/
+├── server/   # MCP server exposing tools over HTTP
+└── client/   # Python client that connects to the server
 ```
 
 ---
 
-### Remote (streamable-http)
-- Runs as a persistent HTTP server accessible over the network
-- Any client connects via URL — Claude Desktop, inspector, or custom apps
-- Server must be running before clients connect
+## Server
 
-**Start the server:**
+### Setup
 ```bash
-python main.py
+cd server
+uv sync
 ```
 
-**Claude Desktop config:**
+### Run
+```bash
+uv run python main.py
+```
+Server starts at `http://localhost:8000/mcp`
+
+### Tools
+- **rool_dice(n_dice)** — Rolls `n` six-sided dice and returns results
+- **add_number(a, b)** — Adds two numbers
+
+### Test with MCP Inspector
+```bash
+npx @modelcontextprotocol/inspector
+```
+Set URL to `http://localhost:8000/mcp` and click **Connect**.
+
+### Claude Desktop config
 ```json
 {
   "mcpServers": {
@@ -72,8 +46,17 @@ python main.py
 }
 ```
 
-**Test with inspector:**
+---
+
+## Client
+
+### Setup
 ```bash
-npx @modelcontextprotocol/inspector
+cd client
+uv sync
 ```
-Then change the URL field to `http://localhost:8000/mcp` and click **Connect**.
+
+### Run (server must be running first)
+```bash
+uv run python main.py
+```
